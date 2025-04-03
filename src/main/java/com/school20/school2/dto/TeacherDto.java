@@ -1,38 +1,42 @@
-package com.school20.school2.Entitys;
+package com.school20.school2.dto;
 
-import jakarta.persistence.*;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "teacher")
-public class Teacher {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teacherId;
 
-    @Column(name = "firstName", nullable = false)
+public class TeacherDto {
+
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String firstName;
 
-    @Column(name = "lastName", nullable = false)
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String lastName;
 
-    @Column(name = "email", nullable = false)
+    @NotNull
+    @NotBlank
+    @NotEmpty
     private String email;
 
-    @Column(name = "gender", nullable = false)
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Size(min = 3, max = 50)
     private String gender;
 
-    @Column(name = "birthDay", nullable = false)
+    @NotNull
+    @Size(min = 3, max = 50)
     private String birthDay;
 
 
-
-    //    @ManyToMany(mappedBy = "teachers")
-//    @Column(name = "studentId")
-//    private List<Student> students;
-
-    public Teacher(Long teacherId, String firstName, String lastName, String email, String gender, String birthDay) {
-        this.teacherId = teacherId;
+    public TeacherDto(String firstName, String lastName, String email, String gender, String birthDay) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -40,15 +44,7 @@ public class Teacher {
         this.birthDay = birthDay;
     }
 
-    public Teacher() {
-    }
-
-    public Long getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
+    public TeacherDto() {
     }
 
     public String getFirstName() {
@@ -93,3 +89,4 @@ public class Teacher {
 
 
 }
+

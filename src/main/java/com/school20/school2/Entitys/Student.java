@@ -1,14 +1,15 @@
 package com.school20.school2.Entitys;
 
 import jakarta.persistence.*;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+
+import java.util.Set;
 
 @Entity
-@Table(name = "teacher")
-public class Teacher {
+@Table(name = "student")
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long teacherId;
+    private Long studentId;
 
     @Column(name = "firstName", nullable = false)
     private String firstName;
@@ -25,30 +26,29 @@ public class Teacher {
     @Column(name = "birthDay", nullable = false)
     private String birthDay;
 
+    @ManyToOne
+    @JoinColumn(name = "teacherId")
+    private Teacher teachers;
 
+    // É assim o relacinamento entre teachers e studantes
+//        @ManyToMany
+//    @JoinTable(name = "student_Teacher",
+//    joinColumns = @JoinColumn(name = "studentId"),
+//    inverseJoinColumns = @JoinColumn(name = "teacherId"))
+//    @Column(name = "teacherId")
+//    private Set<Teacher> teachers;
 
-    //    @ManyToMany(mappedBy = "teachers")
-//    @Column(name = "studentId")
-//    private List<Student> students;
-
-    public Teacher(Long teacherId, String firstName, String lastName, String email, String gender, String birthDay) {
-        this.teacherId = teacherId;
+    public Student(Long studentId, String firstName, String lastName, String email, String gender, String birthDay, Teacher teachers) {
+        this.studentId = studentId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.gender = gender;
         this.birthDay = birthDay;
+        this.teachers = teachers;
     }
 
-    public Teacher() {
-    }
-
-    public Long getTeacherId() {
-        return teacherId;
-    }
-
-    public void setTeacherId(Long teacherId) {
-        this.teacherId = teacherId;
+    public Student() {
     }
 
     public String getFirstName() {
@@ -57,6 +57,14 @@ public class Teacher {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public Long getStudentId() {
+        return studentId;
+    }
+
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 
     public String getLastName() {
@@ -89,6 +97,14 @@ public class Teacher {
 
     public void setBirthDay(String birthDay) {
         this.birthDay = birthDay;
+    }
+
+    public Teacher getTeachers() {
+        return teachers;
+    }
+
+    public void setTeachers(Teacher teachers) {
+        this.teachers = teachers;
     }
 
 
