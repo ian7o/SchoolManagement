@@ -1,50 +1,56 @@
 package com.school20.school2.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import com.school20.school2.enums.Roles;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
 
 
-public class TeacherDto {
+public class UserDto {
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
     @Size(min = 3, max = 50)
     private String firstName;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
     @Size(min = 3, max = 50)
     private String lastName;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
     private String email;
 
-    @NotNull
-    @NotBlank
-    @NotEmpty
+//    @NotNull
+//    @NotBlank
+//    @NotEmpty
     @Size(min = 3, max = 50)
     private String gender;
 
-    @NotNull
+//    @NotNull
     @Size(min = 3, max = 50)
     private String birthDay;
 
+    private String password;
 
-    public TeacherDto(String firstName, String lastName, String email, String gender, String birthDay) {
+    @Enumerated(EnumType.STRING)
+    private Roles roles;
+
+    public UserDto() {
+    }
+
+    public UserDto(String firstName, String lastName, String email, String gender, String birthDay, String password, Roles roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.gender = gender;
         this.birthDay = birthDay;
-    }
-
-    public TeacherDto() {
+        this.password = password;
+        this.roles = roles;
     }
 
     public String getFirstName() {
@@ -87,6 +93,19 @@ public class TeacherDto {
         this.birthDay = birthDay;
     }
 
+    public String getPassword() {
+        return password;
+    }
 
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Roles getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Roles roles) {
+        this.roles = roles;
+    }
 }
-
