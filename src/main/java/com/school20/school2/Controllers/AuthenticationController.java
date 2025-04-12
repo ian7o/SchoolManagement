@@ -1,18 +1,14 @@
 package com.school20.school2.Controllers;
 
 import com.school20.school2.Services.AuthenticationService;
-import com.school20.school2.dto.UserDto;
-import jakarta.validation.Valid;
+import com.school20.school2.dto.LoginDto;
+import com.school20.school2.dto.StudentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/authentication")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
@@ -20,13 +16,16 @@ public class AuthenticationController {
         this.authenticationService = authenticationService;
     }
 
-    @PostMapping(path = "/register")
-    public ResponseEntity<Void> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
-        authenticationService.register(userDto);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
+@PostMapping("/register")
+public ResponseEntity<?> register(@RequestBody StudentDto studentDto) {
+    authenticationService.register(studentDto);
+    return ResponseEntity.status(HttpStatus.OK).body("Registration successful! Welcome, new user with roles: " + studentDto.getRoles());
+}
+
+
+@PostMapping("/login")
+public ResponseEntity<String> login(@RequestBody LoginDto loginDto) {
+    return ResponseEntity.status(HttpStatus.OK).body("Login successful! Welcome, " + loginDto.getEmail() + ".");
+}
 
 }

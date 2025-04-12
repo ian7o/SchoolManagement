@@ -1,7 +1,7 @@
 package com.school20.school2.handMappers;
 
-import com.school20.school2.Entitys.User;
-import com.school20.school2.dto.UserDto;
+import com.school20.school2.Entitys.Student;
+import com.school20.school2.dto.StudentDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -9,9 +9,10 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserDto toUserDto(User user);
+    StudentDto toUserDto(Student student);
 
-    User toUser(UserDto teacherDt);
+    Student toUser(StudentDto studentDto);
 
-    List<UserDto> toUserDtoList(List<User> users);
-    }
+    List<StudentDto> toUserDtoList(List<Student> students);
+
+}

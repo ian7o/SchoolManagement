@@ -5,8 +5,10 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
 
+import java.util.Set;
 
-public class UserDto {
+
+public class StudentDto {
 
 //    @NotNull
 //    @NotBlank
@@ -38,12 +40,12 @@ public class UserDto {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Roles roles;
+    private Set<Roles> roles;
 
-    public UserDto() {
+    public StudentDto() {
     }
 
-    public UserDto(String firstName, String lastName, String email, String gender, String birthDay, String password, Roles roles) {
+    public StudentDto(String firstName, String lastName, String email, String gender, String birthDay, String password, Set<Roles> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -101,11 +103,11 @@ public class UserDto {
         this.password = password;
     }
 
-    public Roles getRoles() {
+    public Set<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(Roles roles) {
+    public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
 }

@@ -15,7 +15,7 @@
 //
 //    @ManyToOne
 //    @JoinColumn(name = "teacherId")
-//    private User teacher;
+//    private Student teacher;
 //
 //    @Column(name = "grades")
 //    private Integer grades;
@@ -27,7 +27,7 @@
 //    @Column(name = "feedback")
 //    private String feedback;
 //
-//    public FeedbackTable(Long id, Course course, User teacher, Integer grades, Student studentId, String feedback) {
+//    public FeedbackTable(Long id, Course course, Student teacher, Integer grades, Student studentId, String feedback) {
 //        this.id = id;
 //        this.course = course;
 //        this.teacher = teacher;
@@ -55,11 +55,11 @@
 //        this.course = course;
 //    }
 //
-//    public User getTeacher() {
+//    public Student getTeacher() {
 //        return teacher;
 //    }
 //
-//    public void setTeacher(User teacher) {
+//    public void setTeacher(Student teacher) {
 //        this.teacher = teacher;
 //    }
 //
