@@ -1,4 +1,4 @@
-package com.school20.school2.dto;
+package com.school20.school2.Dto;
 
 public class LoginDto {
     private String email;

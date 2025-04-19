@@ -1,6 +1,6 @@
 package com.school20.school2.Entitys;
 
-import com.school20.school2.enums.Roles;
+import com.school20.school2.Enums.Roles;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,46 +15,32 @@ public class Student implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long teacherId;
 
-    @Column(name = "firstName")
+    @Column(name = "firstName", nullable = false, length = 50)
     private String firstName;
 
-    @Column(name = "lastName")
+    @Column(name = "lastName", nullable = false, length = 50)
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "gender")
+    @Column(name = "gender", nullable = false)
     private String gender;
 
-    @Column(name = "birthDay")
+    @Column(name = "birthDay", nullable = false)
     private String birthDay;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
-
     @Enumerated(EnumType.STRING)
-    private Set<Roles> roles = new HashSet<>();
+    private Roles roles;
 
-
-    public Student(Long teacherId, String firstName, String lastName, String email, String gender, String birthDay, String password, Set<Roles> roles) {
-        this.teacherId = teacherId;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.gender = gender;
-        this.birthDay = birthDay;
-        this.password = password;
-        this.roles = roles;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (Roles role : roles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
-        }
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + getRoles()));
         return authorities;
     }
 
@@ -70,17 +56,17 @@ public class Student implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
+        return true;
     }
 
     @Override
@@ -89,6 +75,17 @@ public class Student implements UserDetails {
     }
 
     public Student() {
+    }
+
+    public Student(Long teacherId, String firstName, String lastName, String email, String gender, String birthDay, String password, Roles roles) {
+        this.teacherId = teacherId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.gender = gender;
+        this.birthDay = birthDay;
+        this.password = password;
+        this.roles = roles;
     }
 
 
@@ -144,11 +141,11 @@ public class Student implements UserDetails {
         this.password = password;
     }
 
-    public Set<Roles> getRoles() {
+    public Roles getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(Roles roles) {
         this.roles = roles;
     }
 }

@@ -1,16 +1,16 @@
-package com.school20.school2.security;
+package com.school20.school2.Security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.school20.school2.Services.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
 @Configuration
@@ -18,35 +18,46 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
-    private final PasswordEncoder passwordEncoder;
-    public SecurityConfig(AuthenticationProvider authenticationProvider, PasswordEncoder passwordEncoder) {
+//    private final PasswordEncoder passwordEncoder;
+
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    public SecurityConfig(AuthenticationProvider authenticationProvider,JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.authenticationProvider = authenticationProvider;
-        this.passwordEncoder = passwordEncoder;
+//        this.passwordEncoder = passwordEncoder;
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/v1/authentication/register").permitAll()
-                .requestMatchers("/api/v1/authentication/login").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/authentication/register").permitAll()
+                        .requestMatchers("/api/v1/authentication/login").permitAll()
 
-                .requestMatchers("/swagger-ui/**").permitAll()
-                .requestMatchers("/api-docs/**").permitAll()
-        );
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
+
+                        .requestMatchers("/api/v1/users/thisStudent").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 
         http.csrf(csrf -> csrf.disable());
         http.httpBasic(Customizer.withDefaults());
         http.authenticationProvider(authenticationProvider);
         http.formLogin(Customizer.withDefaults());
+
         return http.build();
     }
 
-    @Autowired
-    public void localUser(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder
-                .inMemoryAuthentication()
-                .withUser("user1")
-                .password(passwordEncoder.encode("pass"))
-                .roles("ADMIN");
-    }
+//    @Autowired
+//    public void localUser(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+//        authenticationManagerBuilder
+//                .inMemoryAuthentication()
+//                .withUser("user1")
+//                .password(passwordEncoder.encode("pass"))
+//                .roles("ADMIN");
+//    }
 }

@@ -1,4 +1,4 @@
-package com.school20.school2.enums;
+package com.school20.school2.Enums;
 
 public enum Roles {
     ADMIN,

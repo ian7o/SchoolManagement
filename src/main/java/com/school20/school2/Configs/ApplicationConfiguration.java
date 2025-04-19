@@ -1,36 +1,26 @@
-package com.school20.school2.Services;
+package com.school20.school2.Configs;
 
-import com.school20.school2.Repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class ApplicationConfiguration implements UserDetailsService {
-    private final UserRepository repository;
+public class ApplicationConfiguration {
+    private final CustomDetailsService customDetailsService;
 
-    public ApplicationConfiguration(UserRepository repository)  {
-        this.repository = repository;
-    }
-
-
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return repository.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("EMAIL not found"));
+    public ApplicationConfiguration(CustomDetailsService customDetailsService) {
+        this.customDetailsService = customDetailsService;
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(this::loadUserByUsername);
+        authProvider.setUserDetailsService(customDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
@@ -44,5 +34,4 @@ public class ApplicationConfiguration implements UserDetailsService {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

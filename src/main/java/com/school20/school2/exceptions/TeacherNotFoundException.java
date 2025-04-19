@@ -1,4 +1,4 @@
-package com.school20.school2.exceptions;
+package com.school20.school2.Exceptions;
 
 public class TeacherNotFoundException extends RuntimeException {
 

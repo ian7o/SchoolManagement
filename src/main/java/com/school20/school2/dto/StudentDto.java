@@ -1,11 +1,9 @@
-package com.school20.school2.dto;
+package com.school20.school2.Dto;
 
-import com.school20.school2.enums.Roles;
+import com.school20.school2.Enums.Roles;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Size;
-
-import java.util.Set;
 
 
 public class StudentDto {
@@ -40,12 +38,12 @@ public class StudentDto {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Set<Roles> roles;
+    private Roles roles;
 
     public StudentDto() {
     }
 
-    public StudentDto(String firstName, String lastName, String email, String gender, String birthDay, String password, Set<Roles> roles) {
+    public StudentDto(String firstName, String lastName, String email, String gender, String birthDay, String password, Roles roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -103,11 +101,11 @@ public class StudentDto {
         this.password = password;
     }
 
-    public Set<Roles> getRoles() {
+    public Roles getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(Roles roles) {
         this.roles = roles;
     }
 }

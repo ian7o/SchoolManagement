@@ -1,7 +1,7 @@
-package com.school20.school2.handMappers;
+package com.school20.school2.HandMappers;
 
 import com.school20.school2.Entitys.Student;
-import com.school20.school2.dto.StudentDto;
+import com.school20.school2.Dto.StudentDto;
 import org.mapstruct.Mapper;
 
 import java.util.List;
