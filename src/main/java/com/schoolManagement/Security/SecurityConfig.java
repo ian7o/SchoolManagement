@@ -29,11 +29,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/authentication/register").permitAll()
-                        .requestMatchers("/api/v1/authentication/login").permitAll()
+                        .requestMatchers("/swagger-ui/**",
+                                "/api/v1/authentication/register",
+                                "/api/v1/authentication/login",
+                                "/api-docs/**").permitAll()
 
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/api-docs/**").permitAll()
 
                         .requestMatchers("/api/v1/users/thisStudent").hasRole("ADMIN")
                         .anyRequest().authenticated()
@@ -50,6 +50,5 @@ public class SecurityConfig {
 
         return http.build();
     }
-
 
 }

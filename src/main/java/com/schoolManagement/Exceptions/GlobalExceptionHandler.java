@@ -1,53 +1,77 @@
 package com.schoolManagement.Exceptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.security.authentication.AccountStatusException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.Date;
+import java.nio.file.AccessDeniedException;
+import java.security.SignatureException;
+import java.time.Instant;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
-    Error error = new Error();
     ProblemDetail problemDetail = null;
 
+
     @ExceptionHandler(value = {
-            TeacherNotFoundException.class,
-            StudentEmailNotFoundException.class
+            EmailNotFoundException.class
+
     })
-    public ResponseEntity<Error> clientNotFoundException(Exception exception, HttpServletRequest request) {
-        error.setMessage(exception.getMessage());
-        error.setPath(request.getRequestURI());
-        error.setMethod(request.getMethod());
-        error.setTimeStamp(new Date());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    public ProblemDetail clientNotFoundException(Exception exception, HttpServletRequest request) {
+        problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        problemDetail.setProperty("method", request.getMethod());
+        problemDetail.setProperty("time", Instant.now());
+        return problemDetail;
     }
 
     @ExceptionHandler(value = {
             EmailAlreadyExistsException.class
     })
-
-    public ResponseEntity<Error> infoAlreadyExist(Exception exception, HttpServletRequest request) {
-        error.setMessage(exception.getMessage());
-        error.setPath(request.getRequestURI());
-        error.setMethod(request.getMethod());
-        error.setTimeStamp(new Date());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    public ProblemDetail infoAlreadyExist(Exception exception, HttpServletRequest request) {
+        problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        problemDetail.setProperty("method", request.getMethod());
+        problemDetail.setProperty("time", Instant.now());
+        return problemDetail;
     }
 
-    //vou substituir por isso pois vai dar o mesmo resultado e é uma classe Já existente
-//    private ResponseEntity<ProblemDetail> infoAlreadyExist(Exception exception, HttpServletRequest request){
-//        problemDetail.setTitle("Teacher email already exit");
-//        problemDetail.setStatus(HttpStatus.BAD_REQUEST);
-//        problemDetail.setDetail(exception.getMessage());
-//        problemDetail.setProperty("method", request.getMethod());
-//        problemDetail.setProperty("uri", request.getRequestURI());
-//        problemDetail.setProperty("time", Instant.now());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
-//    }
-
-
+    @ExceptionHandler(Exception.class)
+    public ProblemDetail handleSecurityException(Exception exception) {
+        switch (exception) {
+            case BadCredentialsException badCredentialsException -> {
+                problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, exception.getMessage());
+                problemDetail.setProperty("description", "The username or password is incorrect");
+                return problemDetail;
+            }
+            case AccountStatusException accountStatusException -> {
+                problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+                problemDetail.setProperty("description", "The account is locked");
+                return problemDetail;
+            }
+            case AccessDeniedException accessDeniedException -> {
+                problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+                problemDetail.setProperty("description", "You are not authorized to access this resource");
+                return problemDetail;
+            }
+            case SignatureException signatureException -> {
+                problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+                problemDetail.setProperty("description", "The JWT signature is invalid");
+                return problemDetail;
+            }
+            case ExpiredJwtException expiredJwtException -> {
+                problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+                problemDetail.setProperty("description", "The JWT token has expired");
+                return problemDetail;
+            }
+            case null, default -> {
+                problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+                problemDetail.setProperty("description", "Undocumented internal server error for security.");
+                return problemDetail;
+            }
+        }
+    }
 }

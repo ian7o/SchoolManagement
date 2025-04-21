@@ -2,7 +2,7 @@ package com.schoolManagement.Service;
 
 import com.schoolManagement.Dto.LoginDto;
 import com.schoolManagement.Entity.Student;
-import com.schoolManagement.Exceptions.StudentEmailNotFoundException;
+import com.schoolManagement.Exceptions.EmailNotFoundException;
 import com.schoolManagement.Repository.StudentRepository;
 import com.schoolManagement.Dto.StudentDto;
 import com.schoolManagement.Exceptions.EmailAlreadyExistsException;
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class AuthenticationService  {
-    private  final StudentRepository studentRepository;
+public class AuthenticationService {
+    private final StudentRepository studentRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -28,9 +28,9 @@ public class AuthenticationService  {
     }
 
     public void register(StudentDto studentDto) {
-         if (studentRepository.existsByEmail(studentDto.getEmail())){
-                  throw new EmailAlreadyExistsException("Email already exists");
-         }
+        if (studentRepository.existsByEmail(studentDto.getEmail())) {
+            throw new EmailAlreadyExistsException("Email already exists");
+        }
 
         Student student = userMapper.toUser(studentDto);
         student.setPassword(passwordEncoder.encode(studentDto.getPassword()));
@@ -38,10 +38,10 @@ public class AuthenticationService  {
     }
 
 
-
     public Student login(LoginDto loginDto) {
+        Student student = studentRepository.findByEmail(loginDto.getEmail()).orElseThrow(() -> new EmailNotFoundException("No Student found with the provided email."));
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-        return studentRepository.findByEmail(loginDto.getEmail()).orElseThrow(() ->new StudentEmailNotFoundException("No Student found with the provided email."));
+        return student;
     }
 
 }
