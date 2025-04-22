@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
             }
             case null, default -> {
                 problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
-                problemDetail.setProperty("description", "Undocumented internal server error for security.");
+                problemDetail.setProperty("description", "Undocumented internal server error.");
                 return problemDetail;
             }
         }

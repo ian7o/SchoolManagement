@@ -1,5 +1,6 @@
 package com.schoolManagement.Security;
 
+import com.schoolManagement.Enum.Role;
 import com.schoolManagement.Service.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +36,7 @@ public class SecurityConfig {
                                 "/api-docs/**").permitAll()
 
 
-                        .requestMatchers("/api/v1/users/thisStudent").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/users/thisStudent").hasRole(Role.ADMIN.toString())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

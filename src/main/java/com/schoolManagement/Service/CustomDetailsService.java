@@ -1,9 +1,10 @@
 package com.schoolManagement.Service;
 
+import com.schoolManagement.Exceptions.EmailNotFoundException;
 import com.schoolManagement.Repository.StudentRepository;
+import com.schoolManagement.constants.MessageConstants;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,9 +17,9 @@ public class CustomDetailsService implements UserDetailsService {
         this.studentRepository = StudentRepository;
     }
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         Optional<UserDetails> foundedUser = studentRepository.findByEmail(username).map(student -> (UserDetails) student);
 //                    .or( () -> studentRepository.findByEmail(username).map( student -> (UserDetails) student));
-        return foundedUser.orElseThrow(() -> new UsernameNotFoundException("no found yo in chain"));
+        return foundedUser.orElseThrow(() -> new EmailNotFoundException(MessageConstants.NO_EMAIL_FOUND));
     }
 }

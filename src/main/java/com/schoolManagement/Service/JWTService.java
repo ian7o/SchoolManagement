@@ -25,8 +25,20 @@ JWTService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
+    private static final String authorization = "Authorization";
+
+    private static final String prefix = "Bearer ";
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public String getAuthorization() {
+        return authorization;
+    }
+
     public String generateToken(UserDetails userDetails) {
-        return buildToken(new HashMap<>(), userDetails,jwtExpiration);
+        return buildToken(new HashMap<>(), userDetails, jwtExpiration);
 
     }
 

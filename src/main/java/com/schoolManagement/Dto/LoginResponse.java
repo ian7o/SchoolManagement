@@ -1,4 +1,4 @@
-package com.schoolManagement.Security;
+package com.schoolManagement.Dto;
 
 public class LoginResponse {
     private String token;

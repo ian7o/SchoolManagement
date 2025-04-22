@@ -2,10 +2,11 @@ package com.schoolManagement.Controller;
 
 import com.schoolManagement.Dto.LoginDto;
 import com.schoolManagement.Entity.Student;
-import com.schoolManagement.Security.LoginResponse;
+import com.schoolManagement.Dto.LoginResponse;
 import com.schoolManagement.Service.AuthenticationService;
 import com.schoolManagement.Dto.StudentDto;
 import com.schoolManagement.Service.JWTService;
+import com.schoolManagement.constants.MessageConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +36,7 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody StudentDto studentDto) {
         authenticationService.register(studentDto);
-        return ResponseEntity.status(HttpStatus.OK).body("Registration successful! Welcome, new user with roles: " + studentDto.getRole());
+        return ResponseEntity.status(HttpStatus.OK).body(MessageConstants.USER_REGISTERED_SUCCESSFULLY + studentDto.getRole());
     }
 
     @PostMapping("/login")

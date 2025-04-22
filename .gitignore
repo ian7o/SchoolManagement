@@ -20,8 +20,10 @@ target/
 *.ipr
 
 ### Logs ###
- saveLogs.log
-
+ *.log
+ *DS.store
+ *.gz
+ 
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
